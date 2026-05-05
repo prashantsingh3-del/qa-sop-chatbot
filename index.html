@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QA SOP Assistant</title>
+</head>
+<body style="font-family: Arial; padding: 20px;">
+<h2>🧪 QA SOP Assistant</h2>
+
+<input id="q" style="width: 70%; padding: 10px;" placeholder="Ask your question..." />
+<button onclick="ask()">Ask</button>
+
+<pre id="ans"></pre>
+
+<script>
+async function ask() {
+  const q = document.getElementById("q").value;
+
+  const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyBRlpzY9Y0EFSOwaw-_p5SWfzPdJKuwfaE", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      contents: [{
+        parts: [{
+          text: `You are a Diagnostic QA SOP Assistant. Answer strictly based on SOP logic. Question: ${q}`
+        }]
+      }]
+    })
+  });
+
+  const data = await res.json();
+  document.getElementById("ans").innerText =
+    data.candidates?.[0]?.content?.parts?.[0]?.text || "No answer";
+}
+</script>
+
+</body>
+</html>
